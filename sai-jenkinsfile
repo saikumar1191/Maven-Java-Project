@@ -1,6 +1,6 @@
 def mvnHome
 def remote = [:]
-  remote.name = 'app-server'
+  remote.name = 'stagingserver'
   remote.host = '172.31.1.201'
   remote.user = 'centos'
   remote.password = 'Rnstech@123'
@@ -55,14 +55,14 @@ pipeline {
             steps {
                  sh "mv target/*.war target/webapp.war"
                  
-                 // Stop the app-server         TOMCAT_HOME/bin/shutdown.sh
-                 sshCommand remote: remote, command: "sh /home/centos/app-server/bin/shutdown.sh"
+                 // Stop the stagingserver        TOMCAT_HOME/bin/shutdown.sh
+                 sshCommand remote: remote, command: "sh /home/centos/stagingserver/bin/shutdown.sh"
                  
                  // Deploy the Application         cp .war to webapps
-                 sshPut remote: remote, from: 'target/webapp.war', into: '/home/centos/app-server/webapps/'
+                 sshPut remote: remote, from: 'target/webapp.war', into: '/home/centos/stagingserver/webapps/'
                  
-                 // Start the app-server       TOMCAT_HOME/bin/startup.sh
-                 sshCommand remote: remote, command: "sh /home/centos/app-server/bin/startup.sh"
+                 // Start the stagingserver       TOMCAT_HOME/bin/startup.sh
+                 sshCommand remote: remote, command: "sh /home/centos/stagingserver/bin/startup.sh"
             }            
         }
     }
