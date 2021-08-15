@@ -13,7 +13,7 @@ pipeline {
         } 
         stage('Static Analysis') {
             agent {
-                label 'BuildServer'
+                label 'Build-Server1'
             }
             steps {
                  sh "'${mvnHome}/bin/mvn' cobertura:cobertura"
