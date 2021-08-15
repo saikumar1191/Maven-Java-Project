@@ -4,14 +4,10 @@ pipeline {
     stages {
         stage('Check Out Code') {
             agent {
-                label 'BuildServer1'
+                label 'Build-server1'
             }
             steps {
                 git credentialsId: 'Saikumar1191_Git_credentials', url: 'https://github.com/saikumar1191/Maven-Java-Project.git'
-                
-                script {
-                    mvnHome = tool name: 'maven3', type: 'maven'
-                }
             }
         } 
     }
