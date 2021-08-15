@@ -1,4 +1,10 @@
 def mvnHome
+def remote = [:]
+  remote.name = 'stagingserver'
+  remote.host = '172.31.1.201'
+  remote.user = 'centos'
+  remote.password = 'Rnstech@123'
+  remote.allowAnyHosts = true
 pipeline {
     agent none
 
@@ -9,9 +15,13 @@ pipeline {
             }
             steps {
                 git credentialsId: 'Saikumar1191_Git_credentials', url: 'https://github.com/saikumar1191/Maven-Java-Project.git'
+                
+                script {
+                    mvnHome = tool name: 'maven3', type: 'maven'
+                }
             }
-        } 
-        stage('Static Analysis') {
+        }    
+        stage('Statis Analysis') {
             agent {
                 label 'Build-Server1'
             }
@@ -20,7 +30,8 @@ pipeline {
             }
             post {
                 success {
-                     cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: '/target/site/cobertura/coverage.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false                }
+                     cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'target/site/cobertura/coverage.xml', conditionalCoverageTargets: '70, 0, 0', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
+                }
             }
         } 
     }
