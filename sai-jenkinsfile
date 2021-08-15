@@ -34,6 +34,20 @@ pipeline {
                 }
             }
         } 
+        stage('Packaging App') {
+            agent {
+                label 'Build-Server1'
+            }
+            steps {
+                 sh "'${mvnHome}/bin/mvn' clean package"
+            }
+            post {
+                success {
+                     junit 'target/surefire-reports/*.xml'
+                     archiveArtifacts artifacts: '**/*.war', followSymlinks: false
+                }
+            }
+        }
     }
 }
      
